@@ -1,37 +1,36 @@
 // Gets all the node js releases that come with a Raspberry Pi compilation
 
-'use strict';
+const Parser = require('../index');
 
-var Parser = require('../index.js');
+async function releasePage(url) {
+  const [$, $elements] = await Parser.parse(url, 'a');
 
-var url = 'https://nodejs.org/dist/';
-Parser.parse(url, 'a', mainPage);
+  $elements.each((index, element) => {
+    const $element = $(element);
+    const text = $element.text();
 
-function mainPage(err, $, $elements) {
-  if (err) {
-    throw err;
-  }
-
-  $elements.each(function(index, element) {
-    var $element = $(element);
-    var href = $element.attr('href');
-
-    if (href.charAt(0) === 'v') {
-      Parser.parse(url + href, 'a', releasePage);
-    }
-  });
-}
-
-function releasePage(err, $, $elements) {
-  if (err) {
-    throw err;
-  }
-
-  $elements.each(function(index, element) {
-    var $element = $(element);
-    var text = $element.text();
-    if (text.indexOf('pi') > -1) {
+    if (text.includes('pi')) {
       console.log(text);
     }
   });
 }
+
+async function mainPage(url) {
+  const [$, $elements] = await Parser.parse(url, 'a');
+
+  await Promise.all(
+    $elements.toArray().map(async (element) => {
+      const $element = $(element);
+      const href = $element.attr('href');
+
+      if (href.startsWith('v')) {
+        await releasePage(url + href);
+      }
+    })
+  );
+}
+
+(async () => {
+  await mainPage('https://nodejs.org/dist/');
+  console.log('done');
+})();
