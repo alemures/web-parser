@@ -1,7 +1,7 @@
 {
   "name": "web-parser",
   "description": "This is a simple tool to parse websites using the jQuery interface.",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "author": "Alejandro Santiago Nieto",
   "license": "MIT",
   "dependencies": {
