@@ -1,9 +1,9 @@
 // Gets all the node js releases that come with a Raspberry Pi compilation
 
-const Parser = require('../index');
+const { parse } = require('../dist/index');
 
 async function releasePage(url) {
-  const [$, $elements] = await Parser.parse(url, 'a');
+  const [$, $elements] = await parse(url, 'a');
 
   $elements.each((index, element) => {
     const $element = $(element);
@@ -16,7 +16,7 @@ async function releasePage(url) {
 }
 
 async function mainPage(url) {
-  const [$, $elements] = await Parser.parse(url, 'a');
+  const [$, $elements] = await parse(url, 'a');
 
   await Promise.all(
     $elements.toArray().map(async (element) => {

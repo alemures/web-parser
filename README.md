@@ -7,7 +7,9 @@ This is a simple tool to parse websites using the jQuery interface, see [cheerio
 Print all `<p>` contents on the page:
 
 ```javascript
-const [$, $elements] = await Parser.parse('http://sample.com', 'p');
+const { parse } = require('web-parser');
+
+const [$, $elements] = await parse('http://sample.com', 'p');
 $elements.each((index, element) => {
   const $element = $(element);
   console.log(`index: ${index}, text: ${$element.text()}`);
